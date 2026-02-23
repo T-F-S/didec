@@ -2,11 +2,11 @@
 % !TeX encoding=UTF-8
 % !TeX spellcheck=en_US
 %%
-%% The LaTeX package didec - version 1.0.0 (2024/02/28)
+%% The LaTeX package didec - version 1.1.0 (2026/02/23)
 %% didec.tex: Manual
 %%
 %% -------------------------------------------------------------------------------------------
-%% Copyright (c) 2024-2024 by Prof. Dr. Dr. Thomas F. Sturm <thomas dot sturm at unibw dot de>
+%% Copyright (c) 2024-2026 by Prof. Dr. Dr. Thomas F. Sturm <thomas dot sturm at unibw dot de>
 %% -------------------------------------------------------------------------------------------
 %%
 %% This work may be distributed and/or modified under the
@@ -34,13 +34,6 @@
 \makeindex
 
 \pdfsuppresswarningpagegroup=1
-
-\DeclareUnicodeCharacter{20AC}{\euro{}}
-\didecsetup{
-    decimal-separator  = {,},
-    grouping-separator = {.},
-    currency           = {}{\;€},
-}
 
 \didecnew{A}
 \didecnew{B}
@@ -70,9 +63,9 @@
 \bigskip
 \begin{absquote}
   \begin{center}\bfseries Abstract\end{center}
-  The \texttt{didec} package supports fixed-point arithmetic with two
-  decimal places (\emph{di-decimal}) which is typical for financial transactions
-  in many currencies. The intended use case is (personal) bookkeeping.
+  The \texttt{didec} package provides fixed-point arithmetic with two decimal places
+  \mbox{(\enquote{\itshape di-decimal})}, as typically used in financial transactions for many currencies.
+  Its primary intended use is (personal) bookkeeping.
 \end{absquote}
 
 \tableofcontents
@@ -80,11 +73,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Quick start}%
-For the impatient: this package provides fixed-point arithmetic with
-two decimal places. You may use it for any purpose where exactly two decimal
-places are needed or suffice, but the main application case is (personal) bookkeeping.
+For readers who prefer a brief summary: this package provides fixed-point
+arithmetic with two decimal places. It can be used in any context where exactly
+two decimal places are required or sufficient; its primary application, however,
+is (personal) bookkeeping.
 
-Say, John wants to keep track about his money. With
+Suppose John wants to keep track of his money. With
 \begin{dispListing}
 \didecnew{John}
 \end{dispListing}
@@ -97,12 +91,12 @@ Now, lets fill in some money:
 \end{dispListing}
 \didecset{John}{1000}
 
-How much money has John now?
+How much money does John have now?
 \begin{dispExample}
 \didecuse{John}
 \end{dispExample}
 
-Obviously, John has Euros and the amount is displayed in a German style manor.
+The amount is given in euros and formatted according to German conventions.
 Of course, this can be adapted to your liking, see \refCom{didecsetup}.
 But now, let us spend some money.
 \begin{dispExample}
@@ -111,7 +105,7 @@ But now, let us spend some money.
 \end{dispExample}
 
 Preferably, the package functions are used inside convenient user commands.
-You can choose between \LaTeX2e and \LaTeX3 programming layer functions.
+You can choose between \LaTeX2e and L3 programming layer functions.
 
 For this quick start, we make some convenience commands for John.
 |\transaction| shall be one purchase made in cash and |\transaction*| one made
@@ -287,7 +281,7 @@ Nevertheless, you get an impression of the differences.
 \usepackage{lmodern,array,booktabs,incgraph}
 \usepackage[skins,documentation]{tcolorbox}
 \input{didec.tempinc}
-\usepackage{l3benchmark,siunitx}
+\usepackage{siunitx}
 \begin{document}
 \begin{inctext}
 \begin{tcolorbox}[blankest]
@@ -382,7 +376,7 @@ If needed, the selected kernel can be questioned by the following:
 {
    { doc name = c_didec_kernel_str },
 }
-The current kernel given as a lower case string: one of
+The current kernel is given as a lower case string: one of
 \docValue*{int} or \docValue*{fp}.
 \begin{dispExample}
 \ExplSyntaxOn
@@ -783,11 +777,7 @@ This standard format can be overwritten by \meta{key list}.
 \didecset{A}{123456.78}
 \didecuse{A}
 
-\didecuse[
-    currency           = {\pounds}{},
-    decimal-separator  = {.},
-    grouping-separator = {,},
-  ]{A}
+\didecuse[ english, currency={\pounds}{} ]{A}
 \end{dispExample}
 \end{docCommands}
 %-------------------------------------------------------------------------------
@@ -927,7 +917,8 @@ Sets some \meta{separator} as grouping separator.
   {
     doc name = currency,
     doc parameter = {=\marg{prefix}\marg{postfix}},
-    doc description = {initially empty},
+    doc description = {initially \texttt{\textbraceleft\textbraceright\textbraceleft\textbackslash ;€\textbraceright}},
+    doc updated = {2026-02-20},
   },
 }
 Sets some \meta{prefix} and \meta{postfix} to denote the currency of the
@@ -950,7 +941,8 @@ This also sets\\
   {
     doc name = currency-negative,
     doc parameter = {=\marg{prefix}\marg{postfix}},
-    doc description = {initially empty},
+    doc description = {initially \texttt{\textbraceleft -\textbraceright\textbraceleft\textbackslash ;€\textbraceright}},
+    doc updated = {2026-02-20},
   },
 }
 Sets some \meta{prefix} and \meta{postfix} to denote the currency of the
@@ -976,6 +968,7 @@ by \refKey{didec/currency-negative}.
 \begin{docDidecKeys}[
     doc parameter   = ,
     doc description = style,
+    doc updated = {2026-02-20},
 ]
 {
   { doc name = german },
@@ -984,8 +977,6 @@ by \refKey{didec/currency-negative}.
   { doc name = float },
 }
 Styles to set some format preferences combined.
-Any currency settings are removed and should be applied afterwards,
-if needed.
 Note that \refCom{didectofp} is more efficient than \refCom{didecuse} with
 style \refKey{didec/float}.
 \begin{center}
@@ -1198,7 +1189,6 @@ Displays the content of \meta{didec var} in the terminal.
 \end{dispListing}
 \end{docCommands}
 %-------------------------------------------------------------------------------
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,9 +1,9 @@
-%% The LaTeX package didec - version 1.0.0 (2024/02/28)
+%% The LaTeX package didec - version 1.1.0 (2026/02/23)
 %% didec.sty: numbers with two decimal places
 %% !TeX encoding=UTF-8
 %%
 %% -------------------------------------------------------------------------------------------
-%% Copyright (c) 2024-2024 by Prof. Dr. Dr. Thomas F. Sturm <thomas dot sturm at unibw dot de>
+%% Copyright (c) 2024-2026 by Prof. Dr. Dr. Thomas F. Sturm <thomas dot sturm at unibw dot de>
 %% -------------------------------------------------------------------------------------------
 %%
 %% This work may be distributed and/or modified under the
@@ -19,8 +19,10 @@
 %% This work consists of all files listed in README.md
 %%
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{didec}{2024/02/28}{1.0.0}
+\ProvidesExplPackage{didec}{2026/02/23}{1.1.0}
   {Fixed-point arithmetic with two decimal places}
+
+% \debug_on:n {all}
 
 %------- package options -------------------
 
@@ -893,25 +895,21 @@
       {
         decimal-separator  = {,},
         grouping-separator = {.},
-        currency           = {}{},
       },
     english            .meta:n =
       {
         decimal-separator  = {.},
         grouping-separator = {,},
-        currency           = {}{},
       },
     french            .meta:n =
       {
         decimal-separator  = {,},
         grouping-separator = {\;},
-        currency           = {}{},
       },
     float              .meta:n =
       {
         decimal-separator  = {.},
         grouping-separator = ,
-        currency           = {}{},
       },
     color-positive     .code:n =
       {
@@ -933,6 +931,7 @@
 \keys_set:nn { didec }
   {
     german,
+    currency           = {}{\;€},
     color-positive     = didec-green,
     color-negative     = didec-red,
   }

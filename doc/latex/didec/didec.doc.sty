@@ -1,10 +1,10 @@
 % !TeX root = didec.tex
 % !TeX encoding=UTF-8
-%% The LaTeX package didec - version 1.0.0 (2024/02/28)
+%% The LaTeX package didec - version 1.1.0 (2026/02/23)
 %% didec.doc.sty: style file for the documentation
 %%
 %% -------------------------------------------------------------------------------------------
-%% Copyright (c) 2024-2024 by Prof. Dr. Dr. Thomas F. Sturm <thomas dot sturm at unibw dot de>
+%% Copyright (c) 2024-2026 by Prof. Dr. Dr. Thomas F. Sturm <thomas dot sturm at unibw dot de>
 %% -------------------------------------------------------------------------------------------
 %%
 %% This work may be distributed and/or modified under the
@@ -21,8 +21,8 @@
 %%
 % include file (style) of didec.tex (manual of the LaTeX package didec)
 
-\def\version{1.0.0}%
-\def\datum{2024/02/28}%
+\def\version{1.1.0}%
+\def\datum{2026/02/23}%
 
 \IfFileExists{didec.doc.cfg}{\input{didec.doc.cfg}}{}
 
@@ -32,6 +32,8 @@
 \RequirePackage[T1]{fontenc}
 \RequirePackage[english]{babel}
 \RequirePackage{lmodern,parskip,array}
+\RequirePackage{microtype}
+\microtypesetup{nopatch=footnote}
 \RequirePackage[svgnames,table]{xcolor}
 \RequirePackage{tikz}
 \RequirePackage{varioref}
@@ -39,7 +41,7 @@
 \RequirePackage[bookmarks,raiselinks,pageanchor,hyperindex,colorlinks]{hyperref}
 \RequirePackage{cleveref}
 \RequirePackage{varwidth,incgraph}
-\RequirePackage[official]{eurosym}
+%\RequirePackage[official]{eurosym}
 
 \RequirePackage[a4paper,left=2.5cm,right=2.5cm,top=1.5cm,bottom=1.5cm,
     marginparsep=3mm,marginparwidth=18mm,
@@ -60,6 +62,7 @@
 \RequirePackage[extendedchars,encoding,filenameencoding=utf-8]{grffile}
 \RequirePackage{siunitx,xfp}
 
+\RequirePackage{minted2}% minted currently broken with Python 3.14
 \RequirePackage{tcolorbox}
 \tcbuselibrary{skins,minted,breakable,documentation,raster}
 
