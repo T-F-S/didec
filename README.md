@@ -1,5 +1,7 @@
 # The LaTeX package didec - version 1.0.0 (2024/02/28)
 
+[![CTAN](https://img.shields.io/ctan/v/didec.svg)](https://www.ctan.org/pkg/didec)
+
 > Copyright (c) 2024-2024 by Prof. Dr. Dr. Thomas F. Sturm <thomas dot sturm at unibw dot de>
 
 > This work may be distributed and/or modified under the
