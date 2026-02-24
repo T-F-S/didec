@@ -1,4 +1,4 @@
-# The LaTeX package didec - version 1.1.0 (2026/02/23)
+# The LaTeX package didec - version 1.1.1 (2026/02/24)
 
 [![CTAN](https://img.shields.io/ctan/v/didec.svg)](https://www.ctan.org/pkg/didec)
 
@@ -17,10 +17,10 @@
 > This work consists of all files listed in README.md
 
 
-The `didec` package supports fixed-point arithmetic with two
-decimal places (di-decimal) which is typical for financial 
-transactions in many currencies. 
-The intended use case is (personal) bookkeeping.
+The `didec` package provides fixed-point arithmetic with two 
+decimal places (di-decimal), as typically used in financial 
+transactions for many currencies.
+Its primary intended use is (personal) bookkeeping.
 
 
 ## Contents of the package
@@ -28,17 +28,14 @@ The intended use case is (personal) bookkeeping.
 - `README.md`            this file
 - `CHANGELOG.md`         log of changes (history)
 - `didec.sty`            LaTeX package file (style file)
-- `didec.pdf`            Documentation for didec
-- `didec.tex`            Source code of the documentation
-- `didec.doc.sty`        Source code of the documentation
+- `didec.pdf`            documentation for didec
+- `didec.tex`            source code of the documentation
+- `didec.doc.sty`        source code of the documentation
 
 
 ## Installation
 
-Copy the contents of the `didec.tds.zip` from CTAN to your local TeX file tree.
+Install the files in the appropriate locations within your local TeX file tree.
 
-Alternatively, put the files to their respective locations within the TeX installation:
-
-- `didec.sty`              -> /tex/latex/didec
+- `didec.sty`              ->  /tex/latex/didec
 -  all other files         ->  /doc/latex/didec
-

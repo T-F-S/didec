@@ -16,6 +16,15 @@ and this project adheres to
 ### Security
 
 
+## [1.1.1] - 2026-02-24
+
+### Changed
+- .tds.zip removed from CTAN upload to comply to CTAN rules
+- TDS structure flattend on GitHub repository
+- `README.md` adapted to these changes
+
+
+
 ## [1.1.0] - 2026-02-23
 
 ### Changed
