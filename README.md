@@ -1,4 +1,4 @@
-# The LaTeX package didec - version 1.1.1 (2026/02/24)
+# The LaTeX package didec - version 1.2.0 (2026/03/02)
 
 [![CTAN](https://img.shields.io/ctan/v/didec.svg)](https://www.ctan.org/pkg/didec)
 

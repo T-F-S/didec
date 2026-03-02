@@ -16,6 +16,21 @@ and this project adheres to
 ### Security
 
 
+## [1.2.0] - 2026-03-02
+
+### Added
+- Option `rounding` with two choices each providing several synonyms (issue #2):
+    - `half-away-from-zero`, `commercial`, `DIN-1333`
+    - `half-to-even`, `mathematical`, `IEEE-754`
+  Rounding is applied only to floating-point expressions. 
+
+### Changed
+- Documentation partially rearranged; new section 'Option settings'
+- The default rounding mode for floating-point expressions is now `half-away-from-zero`.
+  To restore the previous default, use `\didecsetup{rounding=half-to-even}`.
+
+
+
 ## [1.1.1] - 2026-02-24
 
 ### Changed

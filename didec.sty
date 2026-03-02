@@ -1,4 +1,4 @@
-%% The LaTeX package didec - version 1.1.1 (2026/02/24)
+%% The LaTeX package didec - version 1.2.0 (2026/03/02)
 %% didec.sty: numbers with two decimal places
 %% !TeX encoding=UTF-8
 %%
@@ -19,7 +19,7 @@
 %% This work consists of all files listed in README.md
 %%
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{didec}{2026/02/24}{1.1.1}
+\ProvidesExplPackage{didec}{2026/03/02}{1.2.0}
   {Fixed-point arithmetic with two decimal places}
 
 % \debug_on:n {all}
@@ -357,12 +357,30 @@
   }
 
 
+\fp_new:N \l__didec_tmpa_fp
+
+% set didec variable #1 to rounded fp expression #2
+% #1 didec variable
+% #2 floating-point expression for a didec cent value
+\cs_new_protected:Npn \__didec_gset_round:nn #1#2
+  {
+    \fp_set:Nn \l__didec_tmpa_fp { #2 }
+    \bool_if:NTF \l__didec_rounding_mathematical_bool
+      {
+        \__didec_gset_int:nn { #1 }{ \fp_to_int:N \l__didec_tmpa_fp }
+      }
+      {
+        \__didec_gset_int:nn { #1 }{ \fp_to_int:n { round(\l__didec_tmpa_fp,0,sign(\l__didec_tmpa_fp)) } }
+      }
+  }
+
+
 % set didec variable #1 to floating-point expression #2
 % #1 didec variable
 % #2 floating-point expression
 \cs_new_protected:Npn \didec_gset_fp:nn #1#2
   {
-    \__didec_gset_int:nn { #1 }{ \fp_to_int:n { (#2)*100 } }
+    \__didec_gset_round:nn { #1 }{ (#2)*100 }
   }
 
 
@@ -409,7 +427,7 @@
 % #2 floating-point expression
 \cs_new_protected:Npn \didec_gmul_fp:nn #1#2
   {
-    \__didec_gset_int:nn { #1 }{ \fp_to_int:n { \didec_to_int:n { #1 } * (#2) } }
+    \__didec_gset_round:nn { #1 }{ \didec_to_int:n { #1 } * (#2) }
   }
 
 
@@ -419,7 +437,7 @@
 % #3 floating-point expression
 \cs_new_protected:Npn \didec_gmul_fp_to:nnn #1#2#3
   {
-    \__didec_gset_int:nn { #1 }{ \fp_to_int:n { \didec_to_int:n { #2 } * (#3) } }
+    \__didec_gset_round:nn { #1 }{ \didec_to_int:n { #2 } * (#3) }
   }
 
 
@@ -428,7 +446,7 @@
 % #2 floating-point expression
 \cs_new_protected:Npn \didec_gdiv_fp:nn #1#2
   {
-    \__didec_gset_int:nn { #1 }{ \fp_to_int:n { \didec_to_int:n { #1 } / (#2) } }
+    \__didec_gset_round:nn { #1 }{ \didec_to_int:n { #1 } / (#2) }
   }
 
 
@@ -438,7 +456,7 @@
 % #3 floating-point expression
 \cs_new_protected:Npn \didec_gdiv_fp_to:nnn #1#2#3
   {
-    \__didec_gset_int:nn { #1 }{ \fp_to_int:n { \didec_to_int:n { #2 } / (#3) } }
+    \__didec_gset_round:nn { #1 }{ \didec_to_int:n { #2 } / (#3) }
   }
 
 
@@ -719,12 +737,13 @@
   }
 
 
-% set didec variable #1 to integer value #2
-\cs_new_protected:Npn \__didec_gset_int_check:nn #1#2
+% Deprecated
+% set didec variable #1 to fp value #2
+\cs_new_protected:Npn \__didec_gset_round_check:nn #1#2
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \__didec_gset_int:nn { #1 }{ #2 }
+        \__didec_gset_round:nn { #1 }{ #2 }
       }
   }
 
@@ -868,6 +887,7 @@
 
 %------- formatting didec variables (extended) -------------------
 
+\bool_new:N \l__didec_rounding_mathematical_bool
 \tl_new:N \l__didec_decimal_separator_tl
 \tl_new:N \l__didec_grouping_separator_tl
 \tl_new:N \l__didec_currency_prefix_tl
@@ -919,6 +939,15 @@
       {
         \color_set:nn { didec-negative }{ #1 }
       },
+    __mathematical_rounding .bool_set:N         = \l__didec_rounding_mathematical_bool,
+    __commercial_rounding   .bool_set_inverse:N = \l__didec_rounding_mathematical_bool,
+    rounding .choice:,
+    rounding / mathematical        .meta:n = __mathematical_rounding,
+    rounding / half-to-even        .meta:n = __mathematical_rounding,
+    rounding / IEEE-754            .meta:n = __mathematical_rounding,
+    rounding / commercial          .meta:n = __commercial_rounding,
+    rounding / half-away-from-zero .meta:n = __commercial_rounding,
+    rounding / DIN-1333            .meta:n = __commercial_rounding,
   }
 
 \color_set:nn { didec-gray }{ black!85!white }
@@ -934,6 +963,7 @@
     currency           = {}{\;€},
     color-positive     = didec-green,
     color-negative     = didec-red,
+    rounding           = commercial,
   }
 
 % #1 didec variable
@@ -1122,21 +1152,21 @@
 % Deprecated
 \NewDocumentCommand \didecmul { >{\TrimSpaces} O{#2} >{\TrimSpaces} m >{\TrimSpaces} m }
   {
-    \__didec_gset_int_check:nn { #1 }{ \fp_to_int:n { \__didec_eval:n { #2 } / 100 * \__didec_eval:n { #3 } } }
+    \__didec_gset_round_check:nn { #1 }{ \__didec_eval:n { #2 } / 100 * \__didec_eval:n { #3 } }
   }
 
 
 % Deprecated
 \NewDocumentCommand \didecdiv { >{\TrimSpaces} O{#2} >{\TrimSpaces} m >{\TrimSpaces} m }
   {
-    \__didec_gset_int_check:nn { #1 }{ \fp_to_int:n { \__didec_eval:n { #2 } / \__didec_eval:n { #3 } * 100 } }
+    \__didec_gset_round_check:nn { #1 }{ \__didec_eval:n { #2 } / \__didec_eval:n { #3 } * 100 }
   }
 
 
 % Deprecated
 \NewDocumentCommand \didecpercent { >{\TrimSpaces} O{#2} >{\TrimSpaces} m >{\TrimSpaces} m }
   {
-    \__didec_gset_int_check:nn { #1 }{ \fp_to_int:n { \__didec_eval:n { #2 } / \__didec_eval:n { #3 } * 10000 } }
+    \__didec_gset_round_check:nn { #1 }{ \__didec_eval:n { #2 } / \__didec_eval:n { #3 } * 10000 }
   }
 
 

@@ -2,7 +2,7 @@
 % !TeX encoding=UTF-8
 % !TeX spellcheck=en_US
 %%
-%% The LaTeX package didec - version 1.1.1 (2026/02/24)
+%% The LaTeX package didec - version 1.2.0 (2026/03/02)
 %% didec.tex: Manual
 %%
 %% -------------------------------------------------------------------------------------------
@@ -540,7 +540,7 @@ Sets \meta{didec var} to the value of \meta{fp expr} which can
 by any \LaTeX3 floating-point expression.
 \refCom{didecsetfp} trims spaces and performs an existence check for \meta{didec var}.
 Other didec variables can be used inside \meta{fp expr} if guarded with \refCom{didectofp}.
-The result is rounded to 2 decimal places.
+The result is rounded to 2 decimal places according to the rounding rule set by \refKey{didec/rounding}.
 \refCom{didec_gset_fp_check:nn} performs an existence check for \meta{didec var}.
 \begin{dispExample}
 \didecsetfp{A}{2345.6789}
@@ -636,6 +636,7 @@ The result is rounded to 2 decimal places.
 \begin{itemize}
 \item Multiplies \meta{didec var} with the result of computing the \meta{fp expr}
 \item and sets \meta{didec var} or respectively \meta{didec var\textsubscript{2}} to the result.
+\item The result is rounded to 2 decimal places according to the rounding rule set by \refKey{didec/rounding}.
 \end{itemize}
 \begin{dispExample}
 \didecset{A}{123}
@@ -662,6 +663,7 @@ The result is rounded to 2 decimal places.
 \begin{itemize}
 \item Divides \meta{didec var} by the result of computing the \meta{fp expr}
 \item and sets \meta{didec var} or respectively \meta{didec var\textsubscript{2}} to the result.
+\item The result is rounded to 2 decimal places according to the rounding rule set by \refKey{didec/rounding}.
 \end{itemize}
 \begin{dispExample}
 \didecset{A}{123}
@@ -852,12 +854,36 @@ If the \meta{didec expr} is a \meta{didec var},
 %-------------------------------------------------------------------------------
 
 
+
+%-------------------------------------------------------------------------------
+\begin{docCommands}
+{
+  { doc name = didecwrite, doc parameter = \marg{didec var}\marg{stream} },
+  { doc name = didec_write:nn, doc parameter = \marg{didec var}\marg{stream} },
+  { doc name = didec_write_check:nn, doc parameter = \marg{didec var}\marg{stream} },
+}
+Writes \refCom{didecset}\marg{didec var}\marg{current value} to the given
+already opened output \meta{stream}.
+\begin{dispListing}
+\didecwrite{A}{output}
+% writes to output:
+% \didecset{A}{VALUE}
+\end{dispListing}
+\end{docCommands}
+%-------------------------------------------------------------------------------
+
+
+
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Option settings}%
+
 %-------------------------------------------------------------------------------
 \begin{docCommands}
 {
   { doc name = didecsetup, doc parameter = \marg{key list} },
 }
-Sets all keys of the given \meta{key list}. See the following documentation
+Sets all keys of the given \meta{key list}. See the following
 for available settings.
 \begin{dispExample}
 \didecsetup{
@@ -870,45 +896,6 @@ for available settings.
 \end{dispExample}
 \end{docCommands}
 %-------------------------------------------------------------------------------
-
-
-\clearpage
-%-------------------------------------------------------------------------------
-\begin{docDidecKeys}
-{
-  {
-    doc name = decimal-separator,
-    doc parameter = {=\marg{separator}},
-    doc description = {initially |,|},
-  },
-}
-Sets some \meta{separator} as decimal separator.
-\begin{dispExample}
-\didecset{A}{123456.78}
-\didecuse[ decimal-separator={\#} ]{A} \par
-\end{dispExample}
-\end{docDidecKeys}
-%-------------------------------------------------------------------------------
-
-
-
-%-------------------------------------------------------------------------------
-\begin{docDidecKeys}
-{
-  {
-    doc name = grouping-separator,
-    doc parameter = {=\marg{separator}},
-    doc description = {initially |.|},
-  },
-}
-Sets some \meta{separator} as grouping separator.
-\begin{dispExample}
-\didecset{A}{123456.78}
-\didecuse[ grouping-separator={'} ]{A}
-\end{dispExample}
-\end{docDidecKeys}
-%-------------------------------------------------------------------------------
-
 
 
 %-------------------------------------------------------------------------------
@@ -963,7 +950,44 @@ by \refKey{didec/currency-negative}.
 %-------------------------------------------------------------------------------
 
 
+
 \clearpage
+%-------------------------------------------------------------------------------
+\begin{docDidecKeys}
+{
+  {
+    doc name = decimal-separator,
+    doc parameter = {=\marg{separator}},
+    doc description = {initially |,|},
+  },
+}
+Sets some \meta{separator} as decimal separator.
+\begin{dispExample}
+\didecset{A}{123456.78}
+\didecuse[ decimal-separator={\#} ]{A} \par
+\end{dispExample}
+\end{docDidecKeys}
+%-------------------------------------------------------------------------------
+
+
+%-------------------------------------------------------------------------------
+\begin{docDidecKeys}
+{
+  {
+    doc name = grouping-separator,
+    doc parameter = {=\marg{separator}},
+    doc description = {initially |.|},
+  },
+}
+Sets some \meta{separator} as grouping separator.
+\begin{dispExample}
+\didecset{A}{123456.78}
+\didecuse[ grouping-separator={'} ]{A}
+\end{dispExample}
+\end{docDidecKeys}
+%-------------------------------------------------------------------------------
+
+
 %-------------------------------------------------------------------------------
 \begin{docDidecKeys}[
     doc parameter   = ,
@@ -1028,24 +1052,50 @@ The package defines additional colors
 %-------------------------------------------------------------------------------
 
 
-
-
+\clearpage
 %-------------------------------------------------------------------------------
-\begin{docCommands}
+\begin{docDidecKeys}[
+    doc parameter   = {=\marg{rule}},
+    doc description = {initially |half-away-from-zero|},
+    doc new = {2026-03-02},
+]
 {
-  { doc name = didecwrite, doc parameter = \marg{didec var}\marg{stream} },
-  { doc name = didec_write:nn, doc parameter = \marg{didec var}\marg{stream} },
-  { doc name = didec_write_check:nn, doc parameter = \marg{didec var}\marg{stream} },
+  { doc name = rounding },
 }
-Writes \refCom{didecset}\marg{didec var}\marg{current value} to the given
-already opened output \meta{stream}.
-\begin{dispListing}
-\didecwrite{A}{output}
-% writes to output:
-% \didecset{A}{VALUE}
-\end{dispListing}
-\end{docCommands}
+Sets the rounding \meta{rule} for floating-point expressions used inside
+\refCom{didecsetfp}, \refCom{didecmulfp}, \refCom{didecdivfp}, and friends.
+There are two two choices (each providing several synonyms):
+\begin{itemize}
+\item \docValue{half-away-from-zero}, \docValue{commercial}, \docValue{DIN-1333}:\\
+Round to the nearest value; ties are rounded away from zero.\\
+Common: \enquote{commercial rounding}, \enquote{Kaufmännisches Runden}
+\begin{dispExample}
+\didecsetup{rounding=half-away-from-zero}
+\didecsetfp{A}{-2.015}  \didecuse{A}\par
+\didecsetfp{A}{-2.005}  \didecuse{A}\par
+\didecsetfp{A}{2.005}   \didecuse{A}\par
+\didecsetfp{A}{2.015}   \didecuse{A}\par
+\end{dispExample}
+\item \docValue{half-to-even}, \docValue{mathematical}, \docValue{IEEE-754}:\\
+Round to the nearest value; ties are rounded to the nearest even integer.\\
+Common: \enquote{Banker's rounding}, \enquote{Mathematisches Runden}
+\begin{dispExample}
+\didecsetup{rounding=half-to-even}
+\didecsetfp{A}{-2.015}  \didecuse{A}\par
+\didecsetfp{A}{-2.005}  \didecuse{A}\par
+\didecsetfp{A}{2.005}   \didecuse{A}\par
+\didecsetfp{A}{2.015}   \didecuse{A}\par
+\end{dispExample}
+\end{itemize}
+
+Note that \docValue{half-to-even} was the default (and only) setting before
+version 1.2.0. The default changed to \docValue{half-away-from-zero}
+with version 1.2.0.
+\end{docDidecKeys}
 %-------------------------------------------------------------------------------
+
+
+
 
 
 \clearpage
