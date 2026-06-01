@@ -1,4 +1,4 @@
-%% The LaTeX package didec - version 1.2.0 (2026/03/02)
+%% The LaTeX package didec - version 1.2.1 (2026/06/01)
 %% didec.sty: numbers with two decimal places
 %% !TeX encoding=UTF-8
 %%
@@ -19,7 +19,7 @@
 %% This work consists of all files listed in README.md
 %%
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{didec}{2026/03/02}{1.2.0}
+\ProvidesExplPackage{didec}{2026/06/01}{1.2.1}
   {Fixed-point arithmetic with two decimal places}
 
 % \debug_on:n {all}
@@ -51,7 +51,7 @@
 
 \if_predicate:w \didec_if_kernel_int_p:
 
-\str_const:Nn \c_didec_kernel_str { int }
+\str_const:Nn \c_didec_kernel_str { int } % noqa: W415
 
 % <int>
 % test on existence of didec variable #1
@@ -60,9 +60,9 @@
   {
     \if_cs_exist:w g_didec_var_#1_int \cs_end:
       \exp_after:wN \use_i:nn
-    \else:
-      \exp_after:wN \use_ii:nn
-    \fi:
+    \else:                        % noqa: W302
+      \exp_after:wN \use_ii:nn    % noqa: W302
+    \fi:                          % noqa: W302
     {
       \exp_after:wN \if_meaning:w \cs:w g_didec_var_#1_int \cs_end: \scan_stop:
         \prg_return_false:
@@ -143,7 +143,7 @@
   {
     \didec_if_exist:nTF { #1 }
       {
-        \msg_error:nne { didec }{ already-defined }{ #1 }
+        \msg_error:nne { didec } { already-defined } { #1 }
       }
       {
         \int_new:c { g_didec_var_#1_int }
@@ -154,21 +154,21 @@
 % Sets didec variable #1 to the current value of didec variable #2
 \cs_new_protected:Npn \didec_gset_eq:nn #1#2
   {
-    \int_gset_eq:cc { g_didec_var_#1_int }{ g_didec_var_#2_int }
+    \int_gset_eq:cc { g_didec_var_#1_int } { g_didec_var_#2_int }
   }
 
 % <int>
 % set didec variable #1 to integer value #2
 \cs_new_protected:Npn \__didec_gset_int:nn #1#2
   {
-    \int_gset:cn { g_didec_var_#1_int }{ #2 }
+    \int_gset:cn { g_didec_var_#1_int } { #2 }
   }
 
 % <int>
 % add integer #2 to didec variable #1
 \cs_new_protected:Npn \__didec_gadd_int:nn #1#2
   {
-    \int_gadd:cn { g_didec_var_#1_int }{ #2 }
+    \int_gadd:cn { g_didec_var_#1_int } { #2 }
   }
 
 \fi:
@@ -177,7 +177,7 @@
 
 \if_predicate:w \didec_if_kernel_fp_p:
 
-\str_const:Nn \c_didec_kernel_str { fp }
+\str_const:Nn \c_didec_kernel_str { fp } % noqa: W415
 
 % <fp>
 % test on existence of didec variable #1
@@ -186,9 +186,9 @@
   {
     \if_cs_exist:w g_didec_var_#1_fp \cs_end:
       \exp_after:wN \use_i:nn
-    \else:
-      \exp_after:wN \use_ii:nn
-    \fi:
+    \else:                       % noqa: W302
+      \exp_after:wN \use_ii:nn   % noqa: W302
+    \fi:                         % noqa: W302
     {
       \exp_after:wN \if_meaning:w \cs:w g_didec_var_#1_fp \cs_end: \scan_stop:
         \prg_return_false:
@@ -203,7 +203,7 @@
 % #1 large integer value
 \prg_new_conditional:Npnn \__didec_if_negative:n #1 { TF }
   {
-    \exp_last_unbraced:Ne \token_if_eq_charcode:NNTF { \tl_head:n { #1 } }{ - }
+    \exp_last_unbraced:Ne \token_if_eq_charcode:NNTF { \tl_head:n { #1 } } -
       {
         \prg_return_true:
       }
@@ -216,7 +216,7 @@
 % #1 didec variable
 \prg_new_conditional:Npnn \didec_if_negative:n #1 { p, T, F, TF }
   {
-    \exp_last_unbraced:Ne \token_if_eq_charcode:NNTF { \exp_args:Ne \tl_head:n { \didec_to_int:n { #1 } } }{ - }
+    \exp_last_unbraced:Ne \token_if_eq_charcode:NNTF { \exp_args:Ne \tl_head:n { \didec_to_int:n { #1 } } } -
       {
         \prg_return_true:
       }
@@ -236,12 +236,12 @@
 % #1 didec variable
 \cs_new:Npn \__didec_if_positive_token:n #1
   {
-    \token_if_eq_charcode:NNTF { #1 }{ - }
+    \token_if_eq_charcode:NNTF #1 -
       {
         \prg_return_false:
       }
       {
-        \token_if_eq_charcode:NNTF { #1 }{ 0 }
+        \token_if_eq_charcode:NNTF #1 0
           {
             \prg_return_false:
           }
@@ -255,7 +255,7 @@
 % #1 didec variable
 \prg_new_conditional:Npnn \didec_if_zero:n #1 { p, T, F, TF }
   {
-    \exp_last_unbraced:Ne \token_if_eq_charcode:NNTF { \exp_args:Ne \tl_head:n { \didec_to_int:n { #1 } } }{ 0 }
+    \exp_last_unbraced:Ne \token_if_eq_charcode:NNTF { \exp_args:Ne \tl_head:n { \didec_to_int:n { #1 } } } 0
       {
         \prg_return_true:
       }
@@ -292,7 +292,7 @@
   {
     \didec_if_exist:nTF { #1 }
       {
-        \msg_error:nne { didec }{ already-defined }{ #1 }
+        \msg_error:nne { didec } { already-defined } { #1 }
       }
       {
         \fp_new:c { g_didec_var_#1_fp }
@@ -303,21 +303,21 @@
 % Sets didec variable #1 to the current value of didec variable #2
 \cs_new_protected:Npn \didec_gset_eq:nn #1#2
   {
-    \fp_gset_eq:cc { g_didec_var_#1_fp }{ g_didec_var_#2_fp }
+    \fp_gset_eq:cc { g_didec_var_#1_fp } { g_didec_var_#2_fp }
   }
 
 % <fp>
 % set didec variable #1 to integer value #2
 \cs_new_protected:Npn \__didec_gset_int:nn #1#2
   {
-    \fp_gset:cn { g_didec_var_#1_fp }{ #2 }
+    \fp_gset:cn { g_didec_var_#1_fp } { #2 }
   }
 
 % <fp>
 % add integer #2 to didec variable #1
 \cs_new_protected:Npn \__didec_gadd_int:nn #1#2
   {
-    \fp_gadd:cn { g_didec_var_#1_fp }{ #2 }
+    \fp_gadd:cn { g_didec_var_#1_fp } { #2 }
   }
 
 
@@ -334,7 +334,7 @@
         #2
       }
       {
-        \msg_error:nne { didec }{ no-variable }{ #1 }
+        \msg_error:nne { didec } { no-variable } { #1 }
       }
   }
 
@@ -344,7 +344,7 @@
 % #2 didec expression
 \cs_new_protected:Npn \didec_gset:nn #1#2
   {
-    \__didec_gset_int:nn { #1 }{ \__didec_eval:n { #2 } }
+    \__didec_gset_int:nn { #1 } { \__didec_eval:n { #2 } }
   }
 
 
@@ -353,7 +353,7 @@
 % #2 didec expression
 \cs_new_protected:Npn \didec_gset_negative:nn #1#2
   {
-    \__didec_gset_int:nn { #1 }{ - \__didec_eval:n { #2 } }
+    \__didec_gset_int:nn { #1 } { - \__didec_eval:n { #2 } }
   }
 
 
@@ -367,10 +367,10 @@
     \fp_set:Nn \l__didec_tmpa_fp { #2 }
     \bool_if:NTF \l__didec_rounding_mathematical_bool
       {
-        \__didec_gset_int:nn { #1 }{ \fp_to_int:N \l__didec_tmpa_fp }
+        \__didec_gset_int:nn { #1 } { \fp_to_int:N \l__didec_tmpa_fp }
       }
       {
-        \__didec_gset_int:nn { #1 }{ \fp_to_int:n { round(\l__didec_tmpa_fp,0,sign(\l__didec_tmpa_fp)) } }
+        \__didec_gset_int:nn { #1 } { \fp_to_int:n { round( \l__didec_tmpa_fp,0,sign( \l__didec_tmpa_fp )) } }
       }
   }
 
@@ -380,7 +380,7 @@
 % #2 floating-point expression
 \cs_new_protected:Npn \didec_gset_fp:nn #1#2
   {
-    \__didec_gset_round:nn { #1 }{ (#2)*100 }
+    \__didec_gset_round:nn { #1 } { (#2)*100 }
   }
 
 
@@ -389,7 +389,7 @@
 % #2 didec expression
 \cs_new_protected:Npn \didec_gadd:nn #1#2
   {
-    \__didec_gadd_int:nn { #1 }{ \__didec_eval:n { #2 } }
+    \__didec_gadd_int:nn { #1 } { \__didec_eval:n { #2 } }
   }
 
 
@@ -399,7 +399,7 @@
 % #3 didec expression
 \cs_new_protected:Npn \didec_gadd_to:nnn #1#2#3
   {
-    \__didec_gset_int:nn { #1 }{ \__didec_eval:n { #2 } + \__didec_eval:n { #3 } }
+    \__didec_gset_int:nn { #1 } { \__didec_eval:n { #2 } + \__didec_eval:n { #3 } }
   }
 
 
@@ -408,7 +408,7 @@
 % #2 didec expression
 \cs_new_protected:Npn \didec_gsub:nn #1#2
   {
-    \__didec_gadd_int:nn { #1 }{ - \__didec_eval:n { #2 } }
+    \__didec_gadd_int:nn { #1 } { - \__didec_eval:n { #2 } }
   }
 
 
@@ -418,7 +418,7 @@
 % #3 didec expression
 \cs_new_protected:Npn \didec_gsub_to:nnn #1#2#3
   {
-    \__didec_gset_int:nn { #1 }{ \__didec_eval:n { #2 } - \__didec_eval:n { #3 } }
+    \__didec_gset_int:nn { #1 } { \__didec_eval:n { #2 } - \__didec_eval:n { #3 } }
   }
 
 
@@ -427,7 +427,7 @@
 % #2 floating-point expression
 \cs_new_protected:Npn \didec_gmul_fp:nn #1#2
   {
-    \__didec_gset_round:nn { #1 }{ \didec_to_int:n { #1 } * (#2) }
+    \__didec_gset_round:nn { #1 } { \didec_to_int:n { #1 } * (#2) }
   }
 
 
@@ -437,7 +437,7 @@
 % #3 floating-point expression
 \cs_new_protected:Npn \didec_gmul_fp_to:nnn #1#2#3
   {
-    \__didec_gset_round:nn { #1 }{ \didec_to_int:n { #2 } * (#3) }
+    \__didec_gset_round:nn { #1 } { \didec_to_int:n { #2 } * (#3) }
   }
 
 
@@ -446,7 +446,7 @@
 % #2 floating-point expression
 \cs_new_protected:Npn \didec_gdiv_fp:nn #1#2
   {
-    \__didec_gset_round:nn { #1 }{ \didec_to_int:n { #1 } / (#2) }
+    \__didec_gset_round:nn { #1 } { \didec_to_int:n { #1 } / (#2) }
   }
 
 
@@ -456,7 +456,7 @@
 % #3 floating-point expression
 \cs_new_protected:Npn \didec_gdiv_fp_to:nnn #1#2#3
   {
-    \__didec_gset_round:nn { #1 }{ \didec_to_int:n { #2 } / (#3) }
+    \__didec_gset_round:nn { #1 } { \didec_to_int:n { #2 } / (#3) }
   }
 
 
@@ -467,7 +467,7 @@
 % #1 didec variable
 \cs_new:Npn \didec_to_fp:n #1
   {
-    \exp_args:Nf \__didec_format:nn { \didec_to_int:n {#1} }{ . }
+    \exp_args:Ne \__didec_format:nn { \didec_to_int:n {#1} } { . }
   }
 
 
@@ -475,7 +475,7 @@
 % #1 didec variable
 \cs_new:Npn \didec_to_fc:n #1
   {
-    \exp_args:Nf \__didec_format:nn { \didec_to_int:n {#1} }{ , }
+    \exp_args:Ne \__didec_format:nn { \didec_to_int:n {#1} } { , }
   }
 
 
@@ -484,13 +484,14 @@
 \cs_new:Npn \__didec_format:nn #1#2
   {
     \__didec_if_negative:nTF { #1 }
-      { - \exp_args:No \__didec_format_pos:nn { \use_none:n #1 }{ #2 } }
-      { \__didec_format_pos:nn { #1 }{ #2 } }
+      { - \exp_args:No \__didec_format_pos:nn { \use_none:n #1 } { #2 } }
+      { \__didec_format_pos:nn { #1 } { #2 } }
   }
 
 \cs_new:Npn \__didec_format_pos:nn #1#2
   {
-    \exp_args:Ne \__didec_format_pos_i:w { \tl_count:n {#1} }{ #2 } #1 \q_nil \q_nil \q_nil \q_nil \q_nil \q_nil \q_stop
+    \exp_args:Ne \__didec_format_pos_i:w { \tl_count:n {#1} }
+      { #2 } #1 \q_nil \q_nil \q_nil \q_nil \q_nil \q_nil \q_stop
   }
 
 \cs_new:Npn \__didec_format_pos_i:w #1#2#3#4#5#6#7#8#9 \q_stop
@@ -502,16 +503,16 @@
     \or:         #3#4 #2 #5#6   % 4
     \or:       #3#4#5 #2 #6#7   % 5
     \or:     #3#4#5#6 #2 #7#8   % 6
-    \or:   #3#4#5#6#7 #2 #8 \__didec_format_pos_ii:w { 0 }{ #2 } #9 \q_stop  % 7
-    \or: #3#4#5#6#7#8 #2    \__didec_format_pos_ii:w { 1 }{ #2 } #9 \q_stop  % 8
-    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 2 }{ #2 } #9 \q_stop  % 9
-    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 3 }{ #2 } #9 \q_stop  % 10
-    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 4 }{ #2 } #9 \q_stop  % 11
-    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 5 }{ #2 } #9 \q_stop  % 12
-    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 6 }{ #2 } #9 \q_stop  % 13
-    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 7 }{ #2 } #9 \q_stop  % 14
-    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 8 }{ #2 } #9 \q_stop  % 15
-    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 9 }{ #2 } #9 \q_stop  % 16
+    \or:   #3#4#5#6#7 #2 #8 \__didec_format_pos_ii:w { 0 } { #2 } #9 \q_stop  % 7
+    \or: #3#4#5#6#7#8 #2    \__didec_format_pos_ii:w { 1 } { #2 } #9 \q_stop  % 8
+    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 2 } { #2 } #9 \q_stop  % 9
+    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 3 } { #2 } #9 \q_stop  % 10
+    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 4 } { #2 } #9 \q_stop  % 11
+    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 5 } { #2 } #9 \q_stop  % 12
+    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 6 } { #2 } #9 \q_stop  % 13
+    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 7 } { #2 } #9 \q_stop  % 14
+    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 8 } { #2 } #9 \q_stop  % 15
+    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 9 } { #2 } #9 \q_stop  % 16
     \else 0 #2 00 % error
     \fi:
   }
@@ -525,10 +526,10 @@
     \or:         #3#4 #2 #5#6   % 3 = 10 = 16
     \or:       #3#4#5 #2 #6#7   % 4 = 11
     \or:     #3#4#5#6 #2 #7#8   % 5 = 12
-    \or:   #3#4#5#6#7 #2 #8 \__didec_format_pos_ii:w { 0 }{ #2 } #9 \q_stop % 6 = 13
-    \or: #3#4#5#6#7#8 #2    \__didec_format_pos_ii:w { 1 }{ #2 } #9 \q_stop % 7 = 14
-    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 2 }{ #2 } #9 \q_stop % 8 = 15
-    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 3 }{ #2 } #9 \q_stop % 9 = 16
+    \or:   #3#4#5#6#7 #2 #8 \__didec_format_pos_ii:w { 0 } { #2 } #9 \q_stop % 6 = 13
+    \or: #3#4#5#6#7#8 #2    \__didec_format_pos_ii:w { 1 } { #2 } #9 \q_stop % 7 = 14
+    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 2 } { #2 } #9 \q_stop % 8 = 15
+    \or: #3#4#5#6#7#8       \__didec_format_pos_ii:w { 3 } { #2 } #9 \q_stop % 9 = 16
     \fi:
   }
 
@@ -561,7 +562,8 @@
 
 \cs_new:Npn \__didec_format_group_pos:nnn #1#2#3
   {
-    \exp_args:Ne \__didec_format_group_pos_i:w { \tl_count:n {#1} }{ #2 }{ #3 } #1 \q_nil \q_nil \q_nil \q_nil \q_nil \q_stop
+    \exp_args:Ne \__didec_format_group_pos_i:w { \tl_count:n {#1} }
+      { #2 } { #3 } #1 \q_nil \q_nil \q_nil \q_nil \q_nil \q_stop
   }
 
 \cs_new:Npn \__didec_format_group_pos_i:w #1#2#3#4#5#6#7#8#9 \q_stop
@@ -572,17 +574,17 @@
     \or:     #4 #2 #5#6   % 3
     \or:   #4#5 #2 #6#7   % 4
     \or: #4#5#6 #2 #7#8   % 5
-    \or:     #4 #3 #5#6#7 #2 #8 \__didec_format_group_pos_ii:w { 0 }{ #2 }{ #3 } #9 \q_stop  % 6
-    \or:   #4#5 #3 #6#7#8 #2    \__didec_format_group_pos_ii:w { 1 }{ #2 }{ #3 } #9 \q_stop  % 7
-    \or: #4#5#6 #3 #7#8         \__didec_format_group_pos_ii:w { 2 }{ #2 }{ #3 } #9 \q_stop  % 8
-    \or:     #4 #3 #5#6#7 #3 #8 \__didec_format_group_pos_ii:w { 3 }{ #2 }{ #3 } #9 \q_stop  % 9
-    \or:   #4#5 #3 #6#7#8 #3    \__didec_format_group_pos_ii:w { 4 }{ #2 }{ #3 } #9 \q_stop  % 10
-    \or: #4#5#6 #3 #7#8         \__didec_format_group_pos_ii:w { 5 }{ #2 }{ #3 } #9 \q_stop  % 11
-    \or:     #4 #3 #5#6#7 #3 #8 \__didec_format_group_pos_ii:w { 6 }{ #2 }{ #3 } #9 \q_stop  % 12
-    \or:   #4#5 #3 #6#7#8 #3    \__didec_format_group_pos_ii:w { 7 }{ #2 }{ #3 } #9 \q_stop  % 13
-    \or: #4#5#6 #3 #7#8         \__didec_format_group_pos_ii:w { 8 }{ #2 }{ #3 } #9 \q_stop  % 14
-    \or:     #4 #3 #5#6#7 #3 #8 \__didec_format_group_pos_ii:w { 9 }{ #2 }{ #3 } #9 \q_stop  % 15
-    \or:   #4#5 #3 #6#7#8 #3    \__didec_format_group_pos_ii:w { 10 }{ #2 }{ #3 } #9 \q_stop % 16
+    \or:     #4 #3 #5#6#7 #2 #8 \__didec_format_group_pos_ii:w { 0 } { #2 } { #3 } #9 \q_stop  % 6
+    \or:   #4#5 #3 #6#7#8 #2    \__didec_format_group_pos_ii:w { 1 } { #2 } { #3 } #9 \q_stop  % 7
+    \or: #4#5#6 #3 #7#8         \__didec_format_group_pos_ii:w { 2 } { #2 } { #3 } #9 \q_stop  % 8
+    \or:     #4 #3 #5#6#7 #3 #8 \__didec_format_group_pos_ii:w { 3 } { #2 } { #3 } #9 \q_stop  % 9
+    \or:   #4#5 #3 #6#7#8 #3    \__didec_format_group_pos_ii:w { 4 } { #2 } { #3 } #9 \q_stop  % 10
+    \or: #4#5#6 #3 #7#8         \__didec_format_group_pos_ii:w { 5 } { #2 } { #3 } #9 \q_stop  % 11
+    \or:     #4 #3 #5#6#7 #3 #8 \__didec_format_group_pos_ii:w { 6 } { #2 } { #3 } #9 \q_stop  % 12
+    \or:   #4#5 #3 #6#7#8 #3    \__didec_format_group_pos_ii:w { 7 } { #2 } { #3 } #9 \q_stop  % 13
+    \or: #4#5#6 #3 #7#8         \__didec_format_group_pos_ii:w { 8 } { #2 } { #3 } #9 \q_stop  % 14
+    \or:     #4 #3 #5#6#7 #3 #8 \__didec_format_group_pos_ii:w { 9 } { #2 } { #3 } #9 \q_stop  % 15
+    \or:   #4#5 #3 #6#7#8 #3    \__didec_format_group_pos_ii:w { 10 } { #2 } { #3 } #9 \q_stop % 16
     \else     1 #2 00 % error
     \fi:
   }
@@ -595,12 +597,12 @@
     \or:     #4 #2 #5#6    % 2 = 8 = 13
     \or:   #4#5 #2 #6#7    % 3 = 9 = 14
     \or: #4#5#6 #2 #7#8    % 4 = 10 = 15
-    \or:     #4 #3 #5#6#7 #2 #8 \__didec_format_group_pos_ii:w { 0 }{ #2 }{ #3 } #9 \q_stop % 5 = 11 = 16
-    \or:   #4#5 #3 #6#7#8 #2    \__didec_format_group_pos_ii:w { 1 }{ #2 }{ #3 } #9 \q_stop % 6 = 12
-    \or: #4#5#6 #3 #7#8         \__didec_format_group_pos_ii:w { 2 }{ #2 }{ #3 } #9 \q_stop % 7 = 13
-    \or:     #4 #3 #5#6#7 #3 #8 \__didec_format_group_pos_ii:w { 3 }{ #2 }{ #3 } #9 \q_stop % 8 = 14
-    \or:   #4#5 #3 #6#7#8 #3    \__didec_format_group_pos_ii:w { 4 }{ #2 }{ #3 } #9 \q_stop % 9 = 15
-    \or: #4#5#6 #3 #7#8         \__didec_format_group_pos_ii:w { 5 }{ #2 }{ #3 } #9 \q_stop % 10 = 16
+    \or:     #4 #3 #5#6#7 #2 #8 \__didec_format_group_pos_ii:w { 0 } { #2 } { #3 } #9 \q_stop % 5 = 11 = 16
+    \or:   #4#5 #3 #6#7#8 #2    \__didec_format_group_pos_ii:w { 1 } { #2 } { #3 } #9 \q_stop % 6 = 12
+    \or: #4#5#6 #3 #7#8         \__didec_format_group_pos_ii:w { 2 } { #2 } { #3 } #9 \q_stop % 7 = 13
+    \or:     #4 #3 #5#6#7 #3 #8 \__didec_format_group_pos_ii:w { 3 } { #2 } { #3 } #9 \q_stop % 8 = 14
+    \or:   #4#5 #3 #6#7#8 #3    \__didec_format_group_pos_ii:w { 4 } { #2 } { #3 } #9 \q_stop % 9 = 15
+    \or: #4#5#6 #3 #7#8         \__didec_format_group_pos_ii:w { 5 } { #2 } { #3 } #9 \q_stop % 10 = 16
     \fi:
   }
 
@@ -625,7 +627,7 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \didec_write:nn { #1 }{ #2 }
+        \didec_write:nn { #1 } { #2 }
       }
   }
 
@@ -648,7 +650,7 @@
         \didec_to_int:n { #1 }
       }
       {
-        \__didec_eval_p_a:w #1.\q_nil \q_stop
+        \__didec_eval_p_a:w #1 . \q_nil \q_stop
       }
   }
 
@@ -657,10 +659,10 @@
   {
     \quark_if_nil:NTF #2
       {
-        \__didec_eval_c_a:w #1,\q_nil\q_stop
+        \__didec_eval_c_a:w #1 , \q_nil \q_stop
       }
       {
-        #1\__didec_eval_p_b:w #2#3
+        #1 \__didec_eval_p_b:w #2#3
       }
   }
 
@@ -676,7 +678,7 @@
         #100
       }
       {
-        #1\__didec_eval_c_b:w #2#3
+        #1 \__didec_eval_c_b:w #2#3
       }
   }
 
@@ -743,7 +745,7 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \__didec_gset_round:nn { #1 }{ #2 }
+        \__didec_gset_round:nn { #1 } { #2 }
       }
   }
 
@@ -754,7 +756,7 @@
       {
         \__didec_if_exist_else_error:nT { #2 }
           {
-            \didec_gset_eq:nn { #1 }{ #2 }
+            \didec_gset_eq:nn { #1 } { #2 }
           }
       }
   }
@@ -766,7 +768,7 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \didec_gset:nn { #1 }{ #2 }
+        \didec_gset:nn { #1 } { #2 }
       }
   }
 
@@ -777,7 +779,7 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \didec_gset_negative:nn { #1 }{ #2 }
+        \didec_gset_negative:nn { #1 } { #2 }
       }
   }
 
@@ -788,7 +790,7 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \didec_gset_fp:nn { #1 }{ #2 }
+        \didec_gset_fp:nn { #1 } { #2 }
       }
   }
 
@@ -799,7 +801,7 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \didec_gadd:nn { #1 }{ #2 }
+        \didec_gadd:nn { #1 } { #2 }
       }
   }
 
@@ -811,7 +813,7 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \didec_gadd_to:nnn { #1 }{ #2 }{ #3 }
+        \didec_gadd_to:nnn { #1 } { #2 } { #3 }
       }
   }
 
@@ -822,7 +824,7 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \didec_gsub:nn { #1 }{ #2 }
+        \didec_gsub:nn { #1 } { #2 }
       }
   }
 
@@ -834,7 +836,7 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \didec_gsub_to:nnn { #1 }{ #2 }{ #3 }
+        \didec_gsub_to:nnn { #1 } { #2 } { #3 }
       }
   }
 
@@ -845,7 +847,7 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \didec_gmul_fp:nn { #1 }{ #2 }
+        \didec_gmul_fp:nn { #1 } { #2 }
       }
   }
 
@@ -857,7 +859,7 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \didec_gmul_fp_to:nnn { #1 }{ #2 }{ #3 }
+        \didec_gmul_fp_to:nnn { #1 } { #2 } { #3 }
       }
   }
 
@@ -868,7 +870,7 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \didec_gdiv_fp:nn { #1 }{ #2 }
+        \didec_gdiv_fp:nn { #1 } { #2 }
       }
   }
 
@@ -880,7 +882,7 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \didec_gdiv_fp_to:nnn { #1 }{ #2 }{ #3 }
+        \didec_gdiv_fp_to:nnn { #1 } { #2 } { #3 }
       }
   }
 
@@ -911,33 +913,33 @@
         \tl_set:No \l__didec_currency_negative_prefix_tl  { \use_i:nn #1 }
         \tl_set:No \l__didec_currency_negative_postfix_tl { \use_ii:nn #1 }
       },
-    german             .meta:n =
+    german         .meta:n =
       {
-        decimal-separator  = {,},
-        grouping-separator = {.},
+        decimal-separator  = { , },
+        grouping-separator = { . },
       },
-    english            .meta:n =
+    english        .meta:n =
       {
-        decimal-separator  = {.},
-        grouping-separator = {,},
+        decimal-separator  = { . },
+        grouping-separator = { , },
       },
-    french            .meta:n =
+    french         .meta:n =
       {
-        decimal-separator  = {,},
-        grouping-separator = {\;},
+        decimal-separator  = { , },
+        grouping-separator = { \; },
       },
-    float              .meta:n =
+    float          .meta:n =
       {
-        decimal-separator  = {.},
+        decimal-separator  = { . },
         grouping-separator = ,
       },
-    color-positive     .code:n =
+    color-positive .code:n =
       {
-        \color_set:nn { didec-positive }{ #1 }
+        \color_set:nn { didec-positive } { #1 }
       },
-    color-negative     .code:n =
+    color-negative .code:n =
       {
-        \color_set:nn { didec-negative }{ #1 }
+        \color_set:nn { didec-negative } { #1 }
       },
     __mathematical_rounding .bool_set:N         = \l__didec_rounding_mathematical_bool,
     __commercial_rounding   .bool_set_inverse:N = \l__didec_rounding_mathematical_bool,
@@ -950,17 +952,17 @@
     rounding / DIN-1333            .meta:n = __commercial_rounding,
   }
 
-\color_set:nn { didec-gray }{ black!85!white }
+\color_set:nn { didec-gray } { black!85!white }
 
-\color_set:nnn { didec-green }{ rgb }{ 0,    0.35, 0    }
-\color_set:nnn { didec-red   }{ rgb }{ 0.35, 0,    0    }
-\color_set:nnn { didec-blue  }{ rgb }{ 0,    0,    0.35 }
+\color_set:nnn { didec-green } { rgb } { 0,    0.35, 0    }
+\color_set:nnn { didec-red   } { rgb } { 0.35, 0,    0    }
+\color_set:nnn { didec-blue  } { rgb } { 0,    0,    0.35 }
 
 
 \keys_set:nn { didec }
   {
     german,
-    currency           = {}{\;€},
+    currency           = {} { \; € },
     color-positive     = didec-green,
     color-negative     = didec-red,
     rounding           = commercial,
@@ -969,7 +971,7 @@
 % #1 didec variable
 \cs_new:Npn \didec_use:n #1
   {
-    \exp_args:Nf \__didec_format_group:nnn { \didec_to_int:n {#1} }{}{}
+    \exp_args:Ne \__didec_format_group:nnn { \didec_to_int:n {#1} } {} {}
   }
 
 % #1 didec variable
@@ -982,17 +984,17 @@
   }
 
 % #1 didec variable
-\cs_new:Npn \didec_color_use:n #1
+\cs_new_protected:Npn \didec_color_use:n #1
   {
     \color_group_begin:
-    \exp_args:Nf \__didec_format_group:nnn { \didec_to_int:n {#1} }
+    \exp_args:Ne \__didec_format_group:nnn { \didec_to_int:n {#1} }
       { \color_select:n { didec-positive } }
       { \color_select:n { didec-negative } }
     \color_group_end:
   }
 
 % #1 didec variable
-\cs_new:Npn \didec_color_use_check:n #1
+\cs_new_protected:Npn \didec_color_use_check:n #1
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
@@ -1001,17 +1003,17 @@
   }
 
 % #1 didec variable
-\cs_new:Npn \didec_color_inverse_use:n #1
+\cs_new_protected:Npn \didec_color_inverse_use:n #1
   {
     \color_group_begin:
-    \exp_args:Nf \__didec_format_group:nnn { \didec_to_int:n {#1} }
+    \exp_args:Ne \__didec_format_group:nnn { \didec_to_int:n {#1} }
       { \color_select:n { didec-negative } }
       { \color_select:n { didec-positive } }
     \color_group_end:
   }
 
 % #1 didec variable
-\cs_new:Npn \didec_color_inverse_use_check:n #1
+\cs_new_protected:Npn \didec_color_inverse_use_check:n #1
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
@@ -1022,12 +1024,12 @@
 
 %------- messages -------------------
 
-\msg_new:nnnn { didec }{ already-defined }
+\msg_new:nnnn { didec } { already-defined }
   { Didec~variable~'#1'~already~defined. }
   { You~tried~to~create~a~new~didec~variable~'#1',~but~it~was~already~defined~elsewhere. }
 
 
-\msg_new:nnnn { didec }{ no-variable }
+\msg_new:nnnn { didec } { no-variable }
   { Unknown~didec~variable~'#1'. }
   { The~didec~variable~'#1'~you~used~is~unknown. }
 
@@ -1038,32 +1040,32 @@
 % #1 didec variable
 \NewExpandableDocumentCommand \didectoint { m }
   {
-    \exp_args:Ne \didec_to_int_check:n{ \tl_trim_spaces:n { #1 } }
+    \exp_args:Ne \didec_to_int_check:n { \tl_trim_spaces:n { #1 } }
   }
 
 % #1 didec variable
 \NewExpandableDocumentCommand \didectofp { m }
   {
-    \exp_args:Ne \didec_to_fp_check:n{ \tl_trim_spaces:n { #1 } }
+    \exp_args:Ne \didec_to_fp_check:n { \tl_trim_spaces:n { #1 } }
   }
 
 % #1 didec variable
 \NewExpandableDocumentCommand \didectofc { m }
   {
-    \exp_args:Ne \didec_to_fc_check:n{ \tl_trim_spaces:n { #1 } }
+    \exp_args:Ne \didec_to_fc_check:n { \tl_trim_spaces:n { #1 } }
   }
 
 % #1 didec variable
 \NewDocumentCommand \didecnew { m }
   {
-    \exp_args:Ne \didec_new:n{ \tl_trim_spaces:n { #1 } }
+    \exp_args:Ne \didec_new:n { \tl_trim_spaces:n { #1 } }
   }
 \NewCommandCopy \didecnewvar \didecnew
 
 % Sets didec variable #1 to the current value of didec variable #2
 \NewDocumentCommand \didecsetequal { m m }
   {
-    \exp_args:Nee \didec_gset_eq_check:nn { \tl_trim_spaces:n { #1 } }{ \tl_trim_spaces:n { #2 } }
+    \exp_args:Nee \didec_gset_eq_check:nn { \tl_trim_spaces:n { #1 } } { \tl_trim_spaces:n { #2 } }
   }
 
 % set didec variable #1 to didec expression #2
@@ -1071,7 +1073,7 @@
 % #2 didec expression
 \NewDocumentCommand \didecset { m m }
   {
-    \exp_args:Ne \didec_gset_check:nn { \tl_trim_spaces:n { #1 } }{ #2 }
+    \exp_args:Ne \didec_gset_check:nn { \tl_trim_spaces:n { #1 } } { #2 }
   }
 
 % set didec variable #1 to didec expression #2
@@ -1079,7 +1081,7 @@
 % #2 didec expression
 \NewDocumentCommand \didecsetnegative { m m }
   {
-    \exp_args:Ne \didec_gset_negative_check:nn { \tl_trim_spaces:n { #1 } }{ #2 }
+    \exp_args:Ne \didec_gset_negative_check:nn { \tl_trim_spaces:n { #1 } } { #2 }
   }
 
 % set didec variable #1 to floating-point expression #2
@@ -1087,7 +1089,7 @@
 % #2 floating-point expression
 \NewDocumentCommand \didecsetfp { m m }
   {
-    \exp_args:Ne \didec_gset_fp_check:nn { \tl_trim_spaces:n { #1 } }{ #2 }
+    \exp_args:Ne \didec_gset_fp_check:nn { \tl_trim_spaces:n { #1 } } { #2 }
   }
 
 
@@ -1098,10 +1100,10 @@
   {
     \IfNoValueTF {#1}
       {
-        \exp_args:Ne \didec_gadd_check:nn { \tl_trim_spaces:n { #2 } }{ #3 }
+        \exp_args:Ne \didec_gadd_check:nn { \tl_trim_spaces:n { #2 } } { #3 }
       }
       {
-        \exp_args:Ne \didec_gadd_to_check:nnn { \tl_trim_spaces:n { #1 } }{ #2 }{ #3 }
+        \exp_args:Ne \didec_gadd_to_check:nnn { \tl_trim_spaces:n { #1 } } { #2 } { #3 }
       }
   }
 
@@ -1113,10 +1115,10 @@
   {
     \IfNoValueTF {#1}
       {
-        \exp_args:Ne \didec_gsub_check:nn { \tl_trim_spaces:n { #2 } }{ #3 }
+        \exp_args:Ne \didec_gsub_check:nn { \tl_trim_spaces:n { #2 } } { #3 }
       }
       {
-        \exp_args:Ne \didec_gsub_to_check:nnn { \tl_trim_spaces:n { #1 } }{ #2 }{ #3 }
+        \exp_args:Ne \didec_gsub_to_check:nnn { \tl_trim_spaces:n { #1 } } { #2 } { #3 }
       }
   }
 
@@ -1127,10 +1129,10 @@
   {
     \IfNoValueTF {#1}
       {
-        \exp_args:Ne \didec_gmul_fp_check:nn { \tl_trim_spaces:n { #2 } }{ #3 }
+        \exp_args:Ne \didec_gmul_fp_check:nn { \tl_trim_spaces:n { #2 } } { #3 }
       }
       {
-        \exp_args:Nee \didec_gmul_fp_to_check:nnn { \tl_trim_spaces:n { #1 } }{ \tl_trim_spaces:n { #2 } }{ #3 }
+        \exp_args:Nee \didec_gmul_fp_to_check:nnn { \tl_trim_spaces:n { #1 } } { \tl_trim_spaces:n { #2 } } { #3 }
       }
   }
 
@@ -1141,45 +1143,45 @@
   {
     \IfNoValueTF {#1}
       {
-        \exp_args:Ne \didec_gdiv_fp_check:nn { \tl_trim_spaces:n { #2 } }{ #3 }
+        \exp_args:Ne \didec_gdiv_fp_check:nn { \tl_trim_spaces:n { #2 } } { #3 }
       }
       {
-        \exp_args:Nee \didec_gdiv_fp_to_check:nnn { \tl_trim_spaces:n { #1 } }{ \tl_trim_spaces:n { #2 } }{ #3 }
+        \exp_args:Nee \didec_gdiv_fp_to_check:nnn { \tl_trim_spaces:n { #1 } } { \tl_trim_spaces:n { #2 } } { #3 }
       }
   }
 
 
 % Deprecated
-\NewDocumentCommand \didecmul { >{\TrimSpaces} O{#2} >{\TrimSpaces} m >{\TrimSpaces} m }
+\NewDocumentCommand \didecmul { > {\TrimSpaces} O {#2} > {\TrimSpaces} m > {\TrimSpaces} m }
   {
-    \__didec_gset_round_check:nn { #1 }{ \__didec_eval:n { #2 } / 100 * \__didec_eval:n { #3 } }
+    \__didec_gset_round_check:nn { #1 } { \__didec_eval:n { #2 } / 100 * \__didec_eval:n { #3 } }
   }
 
 
 % Deprecated
-\NewDocumentCommand \didecdiv { >{\TrimSpaces} O{#2} >{\TrimSpaces} m >{\TrimSpaces} m }
+\NewDocumentCommand \didecdiv { > {\TrimSpaces} O {#2} > {\TrimSpaces} m > {\TrimSpaces} m }
   {
-    \__didec_gset_round_check:nn { #1 }{ \__didec_eval:n { #2 } / \__didec_eval:n { #3 } * 100 }
+    \__didec_gset_round_check:nn { #1 } { \__didec_eval:n { #2 } / \__didec_eval:n { #3 } * 100 }
   }
 
 
 % Deprecated
-\NewDocumentCommand \didecpercent { >{\TrimSpaces} O{#2} >{\TrimSpaces} m >{\TrimSpaces} m }
+\NewDocumentCommand \didecpercent { > {\TrimSpaces} O {#2} > {\TrimSpaces} m > {\TrimSpaces} m }
   {
-    \__didec_gset_round_check:nn { #1 }{ \__didec_eval:n { #2 } / \__didec_eval:n { #3 } * 10000 }
+    \__didec_gset_round_check:nn { #1 } { \__didec_eval:n { #2 } / \__didec_eval:n { #3 } * 10000 }
   }
 
 
 \cs_new:Npn \__didec_sum:w #1#2+#3#4 \q_stop
   {
-    \exp_args:Nne \didec_gadd:nn { #1 }{ #2 }
+    \exp_args:Nne \didec_gadd:nn { #1 } { #2 }
     \quark_if_nil:NF #3
       {
         \__didec_sum:w {#1} #3#4 \q_stop
       }
   }
 
-\didec_new:n {__@temp@__}
+\didec_new:n { __@temp@__ }
 
 % #1 didec variable
 % #2 sum of didec expressions
@@ -1187,9 +1189,9 @@
   {
     \__didec_if_exist_else_error:nT { #1 }
       {
-        \__didec_gset_int:nn {__@temp@__}{ 0 }
-        \__didec_sum:w {__@temp@__} #2 + \q_nil \q_stop
-        \didec_gset_eq:nn { #1 }{__@temp@__}
+        \__didec_gset_int:nn { __@temp@__ } { 0 }
+        \__didec_sum:w { __@temp@__ } #2 + \q_nil \q_stop
+        \didec_gset_eq:nn { #1 } { __@temp@__ }
       }
   }
 
@@ -1197,10 +1199,10 @@
 % Deprecated
 % #1 type (german,english,float)
 % #2 didec expression
-\NewDocumentCommand \didecprint { O{german} m }
+\NewDocumentCommand \didecprint { O { german } m }
   {
-    \didecset{__@temp@__}{ #2 }
-    \didecuse [ #1 ]{__@temp@__}
+    \didecset { __@temp@__ } { #2 }
+    \didecuse [ #1 ] { __@temp@__ }
   }
 
 
@@ -1210,11 +1212,11 @@
 % #1 type (german,english,float)
 % #2 didec expression
 % #3 target macro without backslash
-\NewDocumentCommand \didecstore { O{german} m >{\TrimSpaces}m }
+\NewDocumentCommand \didecstore { O { german } m > {\TrimSpaces} m }
   {
-    \didecset{__@temp@__}{ #2 }
+    \didecset { __@temp@__ } { #2 }
     \group_begin:
-    \keys_set:nn { didec }{ #1 }
+    \keys_set:nn { didec } { #1 }
     \tl_gset:Ne \g__didec_temp_tl { \didec_use:n { __@temp@__ } }
     \group_end:
     \cs_set_eq:cN { #3 } \g__didec_temp_tl
@@ -1230,7 +1232,7 @@
       }
       {
         \group_begin:
-        \keys_set:nn { didec }{ #1 }
+        \keys_set:nn { didec } { #1 }
         \exp_args:Ne \didec_use_check:n { \tl_trim_spaces:n { #2 } }
         \group_end:
       }
@@ -1246,7 +1248,7 @@
       }
       {
         \group_begin:
-        \keys_set:nn { didec }{ #1 }
+        \keys_set:nn { didec } { #1 }
         \exp_args:Ne \didec_color_use_check:n { \tl_trim_spaces:n { #2 } }
         \group_end:
       }
@@ -1262,7 +1264,7 @@
       }
       {
         \group_begin:
-        \keys_set:nn { didec }{ #1 }
+        \keys_set:nn { didec } { #1 }
         \exp_args:Ne \didec_color_inverse_use_check:n { \tl_trim_spaces:n { #2 } }
         \group_end:
       }
@@ -1272,14 +1274,14 @@
 % #2 didec expression
 \NewDocumentCommand \didecformat { o m }
   {
-    \didec_gset:nn { __@temp@__ }{ #2 }
+    \didec_gset:nn { __@temp@__ } { #2 }
     \IfNoValueTF {#1}
       {
         \didec_use:n { __@temp@__ }
       }
       {
         \group_begin:
-        \keys_set:nn { didec }{ #1 }
+        \keys_set:nn { didec } { #1 }
         \didec_use:n { __@temp@__ }
         \group_end:
       }
@@ -1289,14 +1291,14 @@
 % #2 didec expression
 \NewDocumentCommand \dideccolformat { o m }
   {
-    \didec_gset:nn { __@temp@__ }{ #2 }
+    \didec_gset:nn { __@temp@__ } { #2 }
     \IfNoValueTF {#1}
       {
         \didec_color_use:n { __@temp@__ }
       }
       {
         \group_begin:
-        \keys_set:nn { didec }{ #1 }
+        \keys_set:nn { didec } { #1 }
         \didec_color_use:n { __@temp@__ }
         \group_end:
       }
@@ -1306,14 +1308,14 @@
 % #2 didec expression
 \NewDocumentCommand \dideccolinvformat { o m }
   {
-    \didec_gset:nn { __@temp@__ }{ #2 }
+    \didec_gset:nn { __@temp@__ } { #2 }
     \IfNoValueTF {#1}
       {
         \didec_color_inverse_use:n { __@temp@__ }
       }
       {
         \group_begin:
-        \keys_set:nn { didec }{ #1 }
+        \keys_set:nn { didec } { #1 }
         \didec_color_inverse_use:n { __@temp@__ }
         \group_end:
       }
@@ -1322,14 +1324,14 @@
 % #1 key list
 \NewDocumentCommand \didecsetup { m }
   {
-    \keys_set:nn { didec }{ #1 }
+    \keys_set:nn { didec } { #1 }
   }
 
 % #1 didec variable
 % #2 stream
 \NewDocumentCommand \didecwrite { m m }
   {
-    \exp_args:Ne \didec_write_check:nn { \tl_trim_spaces:n { #1 } }{ #2 }
+    \exp_args:Ne \didec_write_check:nn { \tl_trim_spaces:n { #1 } } { #2 }
   }
 
 

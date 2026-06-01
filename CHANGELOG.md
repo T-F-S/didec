@@ -16,6 +16,16 @@ and this project adheres to
 ### Security
 
 
+## [1.2.1] - 2026-06-01
+
+### Changed
+- `f` type expansions replaced by `e`
+
+### Fixed
+- Code style improved with explcheck
+
+
+
 ## [1.2.0] - 2026-03-02
 
 ### Added
